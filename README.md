@@ -1,4 +1,4 @@
-# ⚡ Universal Command Palette (`<universal-command-palette>`)
+# ⚡ Universal Command Palette
 
 > **The zero-footprint, framework-agnostic Micro-frontend Command Palette for high-scale web platforms.**
 
