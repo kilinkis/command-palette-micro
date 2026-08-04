@@ -14,7 +14,7 @@
 
 > Drop this `<universal-command-palette>` tag into **any legacy enterprise web app** (React 16/17/18, Angular, Vue, jQuery, or server-rendered PHP/Rails) without dependency hell or CSS style pollution.
 
-
+https://github.com/user-attachments/assets/26510c7d-a307-4ac7-bf64-9e42e435c8ec
 
 ---
 
