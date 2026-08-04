@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Universal Command Palette | Micro-Frontend Demo</title>
+
+    <!-- Google Fonts for Host Page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Host App Styling (Intentionally aggressive to demonstrate zero CSS leakage) -->
+    <style>
+      :root {
+        --host-bg: #0b0f19;
+        --host-card: #151c2c;
+        --host-accent: #38bdf8;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Aggressive host element styling that would normally break non-isolated widgets */
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--host-bg);
+        color: #e2e8f0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      input, button, select {
+        /* Intentionally weird host styles */
+        font-family: 'Courier New', monospace !important;
+        accent-color: red;
+      }
+
+      .demo-container {
+        max-width: 720px;
+        width: 100%;
+        background: var(--host-card);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 3rem 2.5rem;
+        box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        text-align: center;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 14px;
+        background: rgba(56, 189, 248, 0.1);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        color: var(--host-accent);
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      p.subtitle {
+        font-size: 1.1rem;
+        color: #94a3b8;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .trigger-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 1.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 2rem;
+      }
+
+      .kbd-badge {
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+
+      .features-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-top: 2rem;
+        text-align: left;
+      }
+
+      .feature-item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 1rem;
+      }
+
+      .feature-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #f1f5f9;
+        margin-bottom: 4px;
+      }
+
+      .feature-desc {
+        font-size: 0.82rem;
+        color: #64748b;
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-container">
+      <span class="badge">Micro-Frontend Architecture</span>
+      <h1>Universal Command Palette</h1>
+      <p class="subtitle">
+        A zero-leakage, Shadow DOM encapsulated Cmd+K search component built with React 19, TypeScript, and Vanilla CSS.
+      </p>
+
+      <div class="trigger-card">
+        <span>Press</span>
+        <span class="kbd-badge" id="shortcut-hint">⌘K</span>
+        <span>or</span>
+        <button id="open-btn" style="padding: 8px 16px; cursor: pointer; border-radius: 6px; background: #38bdf8; border: none; color: #000; font-weight: 700;">
+          Open Command Palette
+        </button>
+      </div>
+
+      <div class="features-list">
+        <div class="feature-item">
+          <div class="feature-title">🛡️ Shadow DOM Isolation</div>
+          <div class="feature-desc">Prevents global CSS leakage and framework style collisions.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-title">⚡ Race Condition Safe</div>
+          <div class="feature-desc">Built-in AbortController cancels stale in-flight search promises automatically.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-title">♿ Full Keyboard a11y</div>
+          <div class="feature-desc">Arrow key navigation, focus trapping, ESC close, and WAI-ARIA dialog attributes.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 
+      EMBEDDED MICRO-FRONTEND CUSTOM ELEMENT 
+      Embeddable in ANY web application (React, Vue, Angular, jQuery, static HTML)
+    -->
+    <universal-command-palette></universal-command-palette>
+
+    <!-- Script to mount the custom element entry point -->
+    <script type="module" src="/src/main.tsx"></script>
+
+    <script>
+      // Host page helper script for button trigger
+      document.getElementById('open-btn').addEventListener('click', () => {
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }));
+      });
+
+      // Update shortcut key text for Windows vs Mac
+      if (typeof navigator !== 'undefined' && !/Mac|iPod|iPhone|iPad/.test(navigator.platform)) {
+        document.getElementById('shortcut-hint').textContent = 'Ctrl+K';
+      }
+    </script>
+  </body>
+</html>
